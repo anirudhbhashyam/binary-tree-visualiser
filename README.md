@@ -16,4 +16,4 @@ $ dot -T<format> bst.dot > bst.<format>
 - `dot (graphviz)`
 
 # TODO 
-- Read nodes from file in insertion order.
+- Formalise API.
