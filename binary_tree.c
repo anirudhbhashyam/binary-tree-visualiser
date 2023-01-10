@@ -166,9 +166,31 @@ Node* create_tree_from_file(const char* file)
     return root;
 }
 
-int main(void)
+void cli_usage(FILE* dst, const char* exe)
 {
-    Node* root = create_tree_from_file("data.txt");
+    fprintf(dst, "usage: %s <ARGS>\n", exe);
+    fprintf(dst, "ARGS:\n");
+    fprintf(dst, "\tdata (<>.txt): File containing new line separated nodes.\n");
+}
+
+int main(int argc, char** argv)
+{
+    const char* exe = *argv++;
+    if (argc < 2)
+    {
+        cli_usage(stderr, exe);
+        exit(1);
+    }
+
+    const char* file = *argv++;
+
+    if (file == NULL)
+    {
+        cli_usage(stderr, exe);
+        exit(1);
+    }
+
+    Node* root = create_tree_from_file(file);
 
     const char* dot_file = "bst.dot";
     FILE* f = fopen(dot_file, "w");
