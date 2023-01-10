@@ -126,22 +126,49 @@ void dump_tree(FILE* dst, Node* root)
 
     dump_tree(dst, root->left);
     dump_tree(dst, root->right);
+}
 
+Node* create_tree_from_file(const char* file)
+{
+    FILE* f = fopen(file, "r");
+    if (f == NULL)
+    {
+        fprintf(stderr, "Could not open file %s: %s", file, strerror(errno));
+        exit(1);
+    }
+
+    char line[256];
+    size_t n_nodes = 0;
+    while (fgets(line, sizeof(line), f))
+    {
+        n_nodes += 1;
+    }
+
+    if (n_nodes > NODE_POOL_CAPACITY)
+    {
+        fprintf(stderr, "Maximum capacity exceeded. Reduce the number of nodes.");
+        exit(1);
+    }
+
+    rewind(f);
+
+    Node* root = get_node();
+    fgets(line, sizeof(line), f);
+    root->data = atoi(line);
+
+    while (fgets(line, sizeof(line), f))
+    {
+        insert_node(root, atoi(line));
+    }
+
+    fclose(f);    
+
+    return root;
 }
 
 int main(void)
 {
-    Node* root = get_node();
-    root->data = 5;
-    insert_node(root, 12);
-    insert_node(root, 3);
-    insert_node(root, 6);
-    insert_node(root, 9);
-    insert_node(root, 15);
-    insert_node(root, 1);
-    insert_node(root, 4);
-    insert_node(root, 8);
-    insert_node(root, 10);
+    Node* root = create_tree_from_file("data.txt");
 
     const char* dot_file = "bst.dot";
     FILE* f = fopen(dot_file, "w");
