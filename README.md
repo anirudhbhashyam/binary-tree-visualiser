@@ -13,6 +13,7 @@ $ dot -T<format> bst.dot > bst.<format>
 
 # Dependencies
 - `gcc`
+- `dot (graphviz)`
 
 # TODO 
 - Read nodes from file in insertion order.
